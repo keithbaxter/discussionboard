@@ -89,15 +89,19 @@ public class DiscussionBoard
       String username = in.nextLine();
       System.out.print("Password: ");
       String password = in.nextLine();
-      User found = findUser(username);
-      if (found != null && found.authenticate(password)) 
-      {
-         currentUser = found;
+      User attemptedUsername = findUser(username);
+      if(attemptedUsername = null){
+         System.out.println("Username not found.")
       }
-      else
-      {
-         System.out.println("Authentication failed");
+      else{
+         if(authenticate(passwored, attemptedUsername.getUserEncryptedPassword(), attemptedUsername.getUserSalt())){
+            currentUser = attemptedUsername;
+         }
+         else{
+            System.out.println("Authentication failed.");
+         }
       }
+      
    }
 
    /**
