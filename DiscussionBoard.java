@@ -215,7 +215,7 @@ public class DiscussionBoard
             System.out.println("Error. Cannot edit another user's message.");
             done = true;
          }
-      }
-      currentMessage.setText(text);
+         currentMessage.setText(text);
+      }      
    }
 }
