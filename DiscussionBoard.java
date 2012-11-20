@@ -210,7 +210,7 @@ public class DiscussionBoard
       String text = "";
       boolean done = false;
       while(!done){
-         if(currentUser.getName().equals(currentMessage.getAuthor().getName())){
+         if(currentUser.getName().equals(currentMessage.getAuthor().getName()) || Instructor.class.isInstance(currentUser)){
             String line = in.nextLine();
             if(line.toUpperCase().equals("Q")){
                done = true;
