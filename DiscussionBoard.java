@@ -11,6 +11,7 @@ public class DiscussionBoard
    private User currentUser;
    private Message currentMessage;
    private Scanner in;
+   private byte[] salt;
 
    public static void main(String[] args)
    {
@@ -25,7 +26,8 @@ public class DiscussionBoard
       in = new Scanner(System.in);
       users = new ArrayList<User>();
       messages = new ArrayList<Message>();
-      User admin = new Instructor("admin", "secret");
+      salt = generateSalt();
+      User admin = new Instructor("admin", getEncryptedPassword("secret", salt), salt);
       users.add(admin);
       Message welcome = new Message(admin, "Welcome", 
          "Welcome to the discussion board!\n");
@@ -109,7 +111,9 @@ public class DiscussionBoard
       String password = in.nextLine();
       if (findUser(username) == null) 
       {         
-         users.add(new User(username, password));
+         byte[] salt = generateSalt();
+         byte[] encryptedPassword = getEncryptedPassword(password, salt);
+         users.add(new User(username, encryptedPassword, salt));
       }
       else
       {
