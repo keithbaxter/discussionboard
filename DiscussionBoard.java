@@ -56,7 +56,7 @@ public class DiscussionBoard
                else if (command.equals("L")) { logout(); }
                else if (command.equals("P")) { purgeMessage(); }
                else if (command.equals("A")) { addUser(); }
-               else if (command.equals("E")) {editMessage(); }
+               else if (command.equals("E")) { editMessage(); }
             }
          }
       }
@@ -198,19 +198,23 @@ public class DiscussionBoard
       System.out.print("Message number: ");
       int number = in.nextInt();
       currentMessage = messages.get(number - 1);
+
       String text = "";
       boolean done = false;
-      if(currentUser.getName().equals(currentMessage.getAuthor().getName())){
-         String line = in.nextLine();
-         if(line.toUpperCase().equals("Q")){
-            done = true;
+      while(!done){
+         if(currentUser.getName().equals(currentMessage.getAuthor().getName())){
+            String line = in.nextLine();
+            if(line.toUpperCase().equals("Q")){
+               done = true;
+            }
+            else{
+               text = text + line + "\n";
+            }
          }
          else{
-            text = text + line + "\n";
+            System.out.println("Error. Cannot edit another user's message.");
+            done = true;
          }
-      }
-      else{
-         System.out.println("Error. Cannot edit another user's message.");
       }
       currentMessage.setText(text);
    }

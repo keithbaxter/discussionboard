@@ -47,7 +47,7 @@ public class Message
    Edits the message text.
    */
    public void setText(String text){
-      this.text = text + "\n" + "Edited by " + author.getName() + " at " + date + ".";
+      this.text = text + "\n" + "Edited by " + author.getName() + " at " + date + ".\n";
    }
 
    /**
