@@ -4,17 +4,19 @@
 public class User
 {
    private String name;
-   private String password;
+   private byte[] password;
+   private byte[] salt;
 
    /**
       Constructs a user.
-      @param aName the user's name
-      @param aPassword the user's password
+      @param name the user's name
+      @param password the user's password
    */
-   public User(String aName, String aPassword)
+   public User(String name, byte[] password, byte[] salt)
    {
-      name = aName;
-      password = aPassword;
+      this.name = name;
+      this.password = password;
+      this.salt = salt;
    }
 
    /**
@@ -25,16 +27,32 @@ public class User
    {
       return name;
    }
-   
+
    /**
+   Gets user's encrypted password.
+   @return the user's encrypted password
+   */
+   public byte[] getUserEncryptedPassword(){
+      return password;
+   }
+
+   /**
+   Get's the user's salt.
+   @return the user's salt
+   */
+   public byte[] getUserSalt(){
+      return salt;
+   }
+   
+   /*
       Checks whether the password matches.
       @param aPassword the password to match
       @return true if the user's password matches aPassword
    */
-   public boolean authenticate(String aPassword)
+   /*public boolean authenticate(String aPassword)
    {
       return password.equals(aPassword);
-   }
+   }*/
 
    /**
       Gets the menu for the user.
