@@ -63,6 +63,7 @@ public class User
       return "S)how messages\n"
       + "R)eply to message\n"
       + "E)dit message\n"
+      + "T)itle search\n"
       + "N)ew message\n"
       + "L)ogout\n";
    }

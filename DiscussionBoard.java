@@ -1,5 +1,8 @@
+import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 
 /**
    A simulated discussion board.
@@ -14,7 +17,7 @@ public class DiscussionBoard
    private PasswordEncryptionService p;
    private byte[] salt;
 
-   public static void main(String[] args)
+   public static void main(String[] args) throws NoSuchAlgorithmException, InvalidKeySpecException
 	{
       new DiscussionBoard().run();
    }
@@ -22,7 +25,7 @@ public class DiscussionBoard
    /**
       Constructs the discussion board.
    */
-   public DiscussionBoard()
+   public DiscussionBoard() throws NoSuchAlgorithmException, InvalidKeySpecException
    {
       in = new Scanner(System.in);
       users = new ArrayList<User>();
@@ -39,7 +42,7 @@ public class DiscussionBoard
    /**
       Runs the simulation.
    */
-   public void run()
+   public void run()  throws NoSuchAlgorithmException, InvalidKeySpecException
    {
       while (true)
       {
@@ -61,6 +64,7 @@ public class DiscussionBoard
                else if (command.equals("P")) { purgeMessage(); }
                else if (command.equals("A")) { addUser(); }
                else if (command.equals("E")) { editMessage(); }
+               else if (command.equals("T")) { titleSearch(); }
             }
          }
       }
@@ -85,7 +89,7 @@ public class DiscussionBoard
    /**
       Executes the login command.
    */
-   public void login()
+   public void login() throws NoSuchAlgorithmException, InvalidKeySpecException
    {
       System.out.print("User name: ");
       String username = in.nextLine();
@@ -109,7 +113,7 @@ public class DiscussionBoard
    /**
       Executes the add user command.
    */
-   public void addUser()
+   public void addUser() throws NoSuchAlgorithmException, InvalidKeySpecException
    {
       System.out.print("User name: ");
       String username = in.nextLine();
@@ -227,5 +231,28 @@ public class DiscussionBoard
          }
          currentMessage.setText(text);
       }      
+   }
+
+   /**
+      Searches message titles for search terms.
+      @param search string terms to search for
+      @return ArrayList of matching message titles
+   */
+   public ArrayList<String> titleSearch(String search){
+      ArrayList<String> searchTerms = new ArrayList<String>(Arrays.asList(search.split(" ")));
+      ArrayList<String> messageTitles;
+      ArrayList<String> matchedTitles = new ArrayList<String>();
+
+      for(int i = 0; i < messages.size(); i++){
+         messageTitles = new ArrayList<String>(Arrays.asList(messages.get(i).getTitle().split(" ")));
+         for(int j = 0; j < searchTerms.size(); j++){
+            if(messageTitles.get(i).contains(searchTerms.get(j))){
+               matchedTitles.add(i+1 + ") " + messages.get(i).getTitle());
+               break;
+            }
+         }
+         messageTitles.clear();
+      }
+      return matchedTitles;
    }
 }
