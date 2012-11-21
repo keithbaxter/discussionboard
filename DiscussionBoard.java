@@ -238,21 +238,26 @@ public class DiscussionBoard
       @param search string terms to search for
       @return ArrayList of matching message titles
    */
-   public ArrayList<String> titleSearch(String search){
+   public void titleSearch(){
+      System.out.print("Enter the search terms: ");
+      String search = in.nextLine().toLowerCase();
       ArrayList<String> searchTerms = new ArrayList<String>(Arrays.asList(search.split(" ")));
       ArrayList<String> messageTitles;
       ArrayList<String> matchedTitles = new ArrayList<String>();
 
       for(int i = 0; i < messages.size(); i++){
-         messageTitles = new ArrayList<String>(Arrays.asList(messages.get(i).getTitle().split(" ")));
+         messageTitles = new ArrayList<String>(Arrays.asList(messages.get(i).getTitle().toLowerCase().split(" ")));
          for(int j = 0; j < searchTerms.size(); j++){
-            if(messageTitles.get(i).contains(searchTerms.get(j))){
+            if(messageTitles.contains(searchTerms.get(j))){
                matchedTitles.add(i+1 + ") " + messages.get(i).getTitle());
                break;
             }
          }
          messageTitles.clear();
       }
-      return matchedTitles;
+      for(int k = 0; k < matchedTitles.size(); k++){
+         System.out.println("Matching titles:");
+         System.out.println(matchedTitles.get(k));
+      }
    }
 }
