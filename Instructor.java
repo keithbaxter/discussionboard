@@ -8,9 +8,9 @@ public class Instructor extends User
       @param aName the instructor's name
       @param aPassword the instructor password
    */
-   public Instructor(String aName, String aPassword)
+   public Instructor(String name, byte[] password, byte[] salt)
    {
-      super(aName, aPassword);
+      super(name, password, salt);
    }
 
    public String getMenu() 

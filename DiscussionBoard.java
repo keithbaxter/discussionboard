@@ -11,10 +11,11 @@ public class DiscussionBoard
    private User currentUser;
    private Message currentMessage;
    private Scanner in;
+   private PasswordEncryptionService p;
    private byte[] salt;
 
    public static void main(String[] args)
-   {
+	{
       new DiscussionBoard().run();
    }
 
@@ -26,8 +27,9 @@ public class DiscussionBoard
       in = new Scanner(System.in);
       users = new ArrayList<User>();
       messages = new ArrayList<Message>();
-      salt = generateSalt();
-      User admin = new Instructor("admin", getEncryptedPassword("secret", salt), salt);
+      p = new PasswordEncryptionService();
+      salt = p.generateSalt();
+      User admin = new Instructor("admin", p.getEncryptedPassword("secret", salt), salt);
       users.add(admin);
       Message welcome = new Message(admin, "Welcome", 
          "Welcome to the discussion board!\n");
@@ -90,11 +92,11 @@ public class DiscussionBoard
       System.out.print("Password: ");
       String password = in.nextLine();
       User attemptedUsername = findUser(username);
-      if(attemptedUsername = null){
-         System.out.println("Username not found.")
+      if(attemptedUsername == null){
+         System.out.println("Username not found.");
       }
       else{
-         if(authenticate(passwored, attemptedUsername.getUserEncryptedPassword(), attemptedUsername.getUserSalt())){
+         if(p.authenticate(password, attemptedUsername.getUserEncryptedPassword(), attemptedUsername.getUserSalt())){
             currentUser = attemptedUsername;
          }
          else{
@@ -115,8 +117,8 @@ public class DiscussionBoard
       String password = in.nextLine();
       if (findUser(username) == null) 
       {         
-         byte[] salt = generateSalt();
-         byte[] encryptedPassword = getEncryptedPassword(password, salt);
+         byte[] salt = p.generateSalt();
+         byte[] encryptedPassword = p.getEncryptedPassword(password, salt);
          users.add(new User(username, encryptedPassword, salt));
       }
       else
