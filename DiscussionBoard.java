@@ -3,6 +3,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
+import java.io.*;
 
 /**
    A simulated discussion board.
@@ -16,8 +17,9 @@ public class DiscussionBoard
    private Scanner in;
    private PasswordEncryptionService p;
    private byte[] salt;
+   private File usersFile;
 
-   public static void main(String[] args) throws NoSuchAlgorithmException, InvalidKeySpecException
+   public static void main(String[] args) throws NoSuchAlgorithmException, InvalidKeySpecException, IOException
 	{
       new DiscussionBoard().run();
    }
@@ -25,15 +27,17 @@ public class DiscussionBoard
    /**
       Constructs the discussion board.
    */
-   public DiscussionBoard() throws NoSuchAlgorithmException, InvalidKeySpecException
+   public DiscussionBoard() throws NoSuchAlgorithmException, InvalidKeySpecException, IOException
    {
       in = new Scanner(System.in);
       users = new ArrayList<User>();
       messages = new ArrayList<Message>();
       p = new PasswordEncryptionService();
       salt = p.generateSalt();
+      usersFile = new File("users.txt");
       User admin = new Instructor("admin", p.getEncryptedPassword("secret", salt), salt);
       users.add(admin);
+      users.addAll(readUserInfo());
       Message welcome = new Message(admin, "Welcome", 
          "Welcome to the discussion board!\n");
       messages.add(welcome);
@@ -42,7 +46,7 @@ public class DiscussionBoard
    /**
       Runs the simulation.
    */
-   public void run()  throws NoSuchAlgorithmException, InvalidKeySpecException
+   public void run()  throws NoSuchAlgorithmException, InvalidKeySpecException, IOException
    {
       while (true)
       {
@@ -113,7 +117,7 @@ public class DiscussionBoard
    /**
       Executes the add user command.
    */
-   public void addUser() throws NoSuchAlgorithmException, InvalidKeySpecException
+   public void addUser() throws NoSuchAlgorithmException, InvalidKeySpecException, IOException
    {
       System.out.print("User name: ");
       String username = in.nextLine();
@@ -123,7 +127,9 @@ public class DiscussionBoard
       {         
          byte[] salt = p.generateSalt();
          byte[] encryptedPassword = p.getEncryptedPassword(password, salt);
-         users.add(new User(username, encryptedPassword, salt));
+         User user = new User(username, encryptedPassword, salt);
+         users.add(user);
+         writeUserInfo(user);
       }
       else
       {
@@ -259,5 +265,42 @@ public class DiscussionBoard
          System.out.println("Matching titles:");
          System.out.println(matchedTitles.get(k));
       }
+   }
+
+   /**
+      Writes user info to file on disk
+   */
+   public void writeUserInfo(User user) throws IOException {
+      FileWriter fw = new FileWriter(usersFile, true);
+      BufferedWriter bw = new BufferedWriter(fw);
+      bw.write(user.toString() + "\r\n");
+      bw.close();
+   }
+
+   /**
+      Reads user info from file on disk
+      @return ArrayList<User> from user info
+   */
+   public ArrayList<User> readUserInfo() throws IOException {
+      Scanner in = new Scanner(usersFile);
+      String temp;
+      String name;
+      String pass;      
+      String salt;
+      ArrayList<User> user = new ArrayList<User>();
+
+      while(in.hasNext()){
+         temp = in.next();
+         if(temp != ""){
+            name = temp;
+            pass = in.next();
+            byte[] p = pass.getBytes();
+            salt = in.next();
+            byte[] s = salt.getBytes();
+            user.add(new User(name, p, s));
+         }
+      }
+      in.close();
+      return user;
    }
 }

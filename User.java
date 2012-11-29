@@ -29,30 +29,30 @@ public class User
    }
 
    /**
-   Gets user's encrypted password.
-   @return the user's encrypted password
+      Gets user's encrypted password.
+      @return the user's encrypted password
    */
-   public byte[] getUserEncryptedPassword(){
-      return password;
+    public byte[] getUserEncryptedPassword(){
+        return password;
    }
 
    /**
-   Get's the user's salt.
-   @return the user's salt
+      Gets the user's salt.
+      @return the user's salt
    */
-   public byte[] getUserSalt(){
-      return salt;
+    public byte[] getUserSalt(){
+        return salt;
    }
-   
-   /*
-      Checks whether the password matches.
-      @param aPassword the password to match
-      @return true if the user's password matches aPassword
+
+   /**
+        @return the paramaters as a string   
    */
-   /*public boolean authenticate(String aPassword)
-   {
-      return password.equals(aPassword);
-   }*/
+   public String toString(){
+        String p = new String(password);
+        String s = new String(salt);        
+        return name + "\r\n" + p + "\r\n" + s;
+   }
+
 
    /**
       Gets the menu for the user.
